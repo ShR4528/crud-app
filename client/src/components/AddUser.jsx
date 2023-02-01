@@ -9,6 +9,8 @@ import {
   Button,
 } from "@mui/material"
 
+import { addUser } from "../service/api"
+
 const Container = styled(FormGroup)`
   width: 50%;
   margin: 5% auto 0 auto;
@@ -28,8 +30,13 @@ const AddUser = () => {
   const [user, setUser] = useState(defaultValue)
 
   const onValueChange = (e) => {
-    console.log(e.target.value)
+    setUser({ ...user, [e.target.name]: e.target.value })
   }
+
+  const addUserDetails = async () => {
+    await addUser(user)
+  }
+
   return (
     <Container>
       <Typography variant="h4">Add User</Typography>
@@ -50,7 +57,7 @@ const AddUser = () => {
         <Input onChange={(e) => onValueChange(e)} name="phone" />
       </FormControl>
       <FormControl>
-        <Button className="button" variant="contained">
+        <Button variant="contained" onClick={() => addUserDetails()}>
           Add User
         </Button>
       </FormControl>
