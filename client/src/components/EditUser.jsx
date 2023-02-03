@@ -9,14 +9,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useNavigate, useParams } from "react-router-dom"
-import { addUser, getUser, getUsers, editUser } from "../service/api"
-
-const initialValue = {
-  name: "",
-  username: "",
-  email: "",
-  phone: "",
-}
+import { getUsers, editUser } from "../service/api"
 
 const Container = styled(FormGroup)`
     width: 50%;
@@ -26,8 +19,15 @@ const Container = styled(FormGroup)`
 `
 
 const EditUser = () => {
-  const [user, setUser] = useState(initialValue)
-  const { name, username, email, phone } = user
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    email: "",
+    phone: "",
+  })
+
+  //const [user, setUser] = useState(initialValue)
+  const { name, username, email, phone } = user || {}
   const { id } = useParams()
 
   let navigate = useNavigate()
@@ -38,8 +38,8 @@ const EditUser = () => {
 
   const loadUserDetails = async () => {
     const response = await getUsers(id)
-    console.log(response)
-    setUser(response?.data)
+
+    setUser(response.data)
   }
 
   const editUserDetails = async () => {
@@ -49,7 +49,9 @@ const EditUser = () => {
 
   const onValueChange = (e) => {
     console.log(e.target.value)
-    setUser({ ...user, [e.target.name]: e.target.value })
+    if (user) {
+      setUser({ ...user, [e.target.name]: e.target.value })
+    }
   }
 
   return (
@@ -60,9 +62,8 @@ const EditUser = () => {
         <Input
           onChange={(e) => onValueChange(e)}
           name="name"
-          value={name}
+          value={name || ""}
           id="my-input"
-          aria-describedby="my-helper-text"
         />
       </FormControl>
       <FormControl>
@@ -72,7 +73,6 @@ const EditUser = () => {
           name="username"
           value={username}
           id="my-input"
-          aria-describedby="my-helper-text"
         />
       </FormControl>
       <FormControl>

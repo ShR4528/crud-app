@@ -40,10 +40,10 @@ const AllUsers = () => {
 
   const getAllUsers = async () => {
     let response = await getUsers()
-    setUsers(response.data)
+    setUsers(response)
   }
 
-  const deleteUser = async (id) => {
+  const deleteUserData = async (id) => {
     await deleteUser(id)
     getAllUsers()
   }
@@ -60,10 +60,10 @@ const AllUsers = () => {
         </THead>
       </TableHead>
       <TableBody>
-        {users.map((user) => (
-          <TRow key={user.id}>
+        {users.map((user, index) => (
+          <TRow key={index}>
             <TableCell>{user._id}</TableCell>
-            <TableCell>{user.name}</TableCell>
+            <TableCell>{user.name || "No name"}</TableCell>
             <TableCell>{user.username}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.phone}</TableCell>
@@ -74,10 +74,15 @@ const AllUsers = () => {
                 style={{ marginRight: 10 }}
                 component={Link}
                 to={`/edit/${user._id}`}
+                key={index}
               >
                 Edit
               </Button>
-              <Button color="secondary" variant="contained">
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() => deleteUserData(user._id)}
+              >
                 Delete
               </Button>
             </TableCell>
